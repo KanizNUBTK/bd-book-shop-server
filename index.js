@@ -33,10 +33,16 @@ async function run(){
           //console.log(books); 
           res.send(books);
       });
+      // display users
+      app.get('/orders', async(req,res)=>{
+        //console.log(req.body);
+        const user = await clientCollection.find().toArray(); 
+        res.send(user);
+      })
 
       //use post to get data by keys
       app.post('/books/bykeys',async (req,res)=>{
-          console.log(req.body);
+          //console.log(req.body);
           const keys = req.body;
           const query = {key:{$in:keys}};
           const users = await bookCollection.find(query).toArray();
@@ -54,8 +60,16 @@ async function run(){
       //Add new books
       app.post('/addbook', async(req,res)=>{
         const book = req.body;
-        console.log('hit the post api',book);
+        //console.log('hit the post api',book);
         const result = await bookCollection.insertOne(book);
+        res.json(result);
+      })
+      // delete a users
+      app.delete('/orders/:id', async(req,res)=>{
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const result = await clientCollection.deleteOne(query);
+        //console.log('delete id=',result);
         res.json(result);
       })
     }
