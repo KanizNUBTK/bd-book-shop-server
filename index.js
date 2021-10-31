@@ -49,6 +49,14 @@ async function run(){
           res.send(users);
 
       });
+      app.get('/books/bykeys',async (req,res)=>{
+          //console.log(req.body);
+          const keys = req.body;
+          const query = {key:{$in:keys}};
+          const users = await bookCollection.find(query).toArray();
+          res.send(users);
+
+      });
 
       //ADD orders API
       app.post('/orders', async (req,res)=>{
